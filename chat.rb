@@ -2,17 +2,18 @@ require "openai"
 require "dotenv/load"
 
 
-
+#bu hello kismini da loop'a koymak istemis
 puts "Hello! How can I help you today?"
 puts "-" * 50
 client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
 message_list = [
     {
         "role" => "system",
-        "content" => "You are a helpful assistant who talks like Severus Snape."
+        "content" => "You are a helpful assistant."
     }
   ]
 
+#cozumde bunu "" olarak initialize ediyor, sonra while loopta hello ve input alip sonra if bye degilse o zaman calistiriyor 
 user_input = gets.chomp
 
 while user_input != "bye"
@@ -34,27 +35,9 @@ while user_input != "bye"
 
   next_message = api_response.fetch("choices").at(0).fetch("message")
   message_list.push(next_message)
-
+  puts next_message.fetch("content")
+  puts "-" * 50
+  
   user_input = gets.chomp
 
 end
-
-
-
-
-
-message_list.push({
-    "role" => "user",
-    "content" => "And how about shawarma?"
-  })
-
-  api_response = client.chat(
-    parameters: {
-      model: "gpt-3.5-turbo",
-      messages: message_list
-    }
-  )
-  
-pp api_response.fetch("choices").at(0).fetch("message")
-
-puts "-" * 50
